@@ -1,0 +1,47 @@
+name: Windows test camera
+
+on:
+  push:
+    paths:
+      - 'windows/vcam-test/**'
+      - '.github/workflows/windows-vcam-test.yml'
+  pull_request:
+    paths:
+      - 'windows/vcam-test/**'
+      - '.github/workflows/windows-vcam-test.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore windows/vcam-test/VCamSample.sln
+
+      - name: Build x64 Release
+        shell: pwsh
+        run: |
+          # the project files ask for VS 2026 (v145); fall back to VS 2022 (v143) on older runners
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationVersion
+          $toolset = if ($vs -like '18.*') { 'v145' } else { 'v143' }
+          Write-Host "Visual Studio $vs, toolset $toolset"
+          msbuild windows/vcam-test/VCamSample.sln /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=$toolset
+
+      - name: Package
+        shell: pwsh
+        run: |
+          $out = 'windows/vcam-test/x64/Release'
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item "$out/VCamSampleSource.dll" dist/ReCamTestSource.dll
+          Copy-Item "$out/VCamSample.exe" dist/ReCamTestCamera.exe
+          Copy-Item windows/vcam-test/package/* dist/
+          Copy-Item windows/vcam-test/LICENSE-VCamSample dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ReCam-test-camera
+          path: dist/
