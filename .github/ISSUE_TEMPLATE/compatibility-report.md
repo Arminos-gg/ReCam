@@ -1,7 +1,7 @@
 ---
 name: Compatibility Report
 about: Report whether ReCam works on your operating system and setup
-title: Compatibility Report
+title: "[Compatibility]: "
 labels: compatibility
 assignees: ''
 

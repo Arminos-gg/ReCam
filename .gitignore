@@ -1,0 +1,42 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Bb]uild/
+out/
+x64/
+ARM64/
+[Dd]ebug/
+[Rr]elease/
+*.exe
+*.dll
+*.pdb
+*.lib
+*.exp
+*.ilk
+*.obj
+
+# Visual Studio and editors
+.vs/
+*.user
+*.suo
+.vscode/
+.idea/
+
+# Go
+/receiver/recam-receiver*
+*.test
+coverage.out
+
+# Certificates, keys and local secrets
+*.pem
+*.key
+*.crt
+*.cer
+*.pfx
+*.p12
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini

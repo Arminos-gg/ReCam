@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/Arminos-gg/ReCam/discussions
+    about: Ask questions or share ideas in Discussions instead of opening an issue.
+  - name: Security vulnerability
+    url: https://github.com/Arminos-gg/ReCam/security/advisories/new
+    about: Report security problems privately, not in a public issue.

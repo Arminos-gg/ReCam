@@ -1,7 +1,7 @@
 ---
 name: Installation / Setup Help
 about: Report installation or configuration problems with ReCam
-title: Setup Help
+title: "[Setup]: "
 labels: help wanted
 assignees: ''
 
