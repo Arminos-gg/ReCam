@@ -2,13 +2,11 @@
 name: Bug report
 about: Report a bug or technical issue with ReCam
 title: Bug
-labels: bug
+labels: bug, enhancement
 assignees: Arminos-gg
 type: Bug
 
 ---
-
-## Title
 
 ## Bug Description
 

@@ -8,10 +8,6 @@ type: Feature
 
 ---
 
-## Title
-
-
-
 ## Is your feature request related to a problem?
 
 Describe the problem or limitation you're experiencing.
