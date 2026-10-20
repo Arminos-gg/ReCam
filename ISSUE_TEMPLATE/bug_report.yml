@@ -1,0 +1,155 @@
+
+name: Bug Report
+description: Report a bug, crash, connection issue, or virtual camera problem.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug in ReCam.
+
+        Please search existing issues first. Never include passwords,
+        private IP information you do not want to share, or sensitive logs.
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: Which operating system is running the ReCam receiver?
+      options:
+        - Windows 11
+        - Linux
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os_version
+    attributes:
+      label: OS Version
+      description: Include the Windows build or Linux distribution and kernel version.
+      placeholder: "Windows 11 24H2 / Ubuntu 24.04, kernel ..."
+    validations:
+      required: true
+
+  - type: input
+    id: recam_version
+    attributes:
+      label: ReCam Version
+      description: Include the release, commit, or branch you are using.
+      placeholder: "v0.1.0 or commit hash"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue_category
+    attributes:
+      label: Problem Category
+      options:
+        - iPhone camera capture
+        - HTTPS or certificate trust
+        - WebRTC connection
+        - Video decoding
+        - Virtual camera registration
+        - Camera missing in Discord
+        - Black or distorted video
+        - Low FPS or high latency
+        - Installation or permissions
+        - Crash
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: connection
+    attributes:
+      label: Connection Method
+      options:
+        - Wi-Fi
+        - USB
+        - Not applicable
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: camera_backend
+    attributes:
+      label: Virtual Camera Backend
+      description: Select the backend, if known.
+      options:
+        - Windows Media Foundation
+        - Windows DirectShow
+        - Linux v4l2loopback
+        - Unknown
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected to happen.
+      placeholder: |
+        Expected:
+        Actual:
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: List the steps needed to trigger the issue.
+      placeholder: |
+        1. Start the receiver
+        2. Open the sender on the iPhone
+        3. Select the ReCam camera in Discord
+        4. Observe the problem
+    validations:
+      required: true
+
+  - type: dropdown
+    id: discord_detection
+    attributes:
+      label: Does Discord Detect the Camera?
+      options:
+        - Yes, and video works
+        - Yes, but video is black or broken
+        - No, the camera is missing
+        - Not tested
+        - Not applicable
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reproducibility
+    attributes:
+      label: Reproducibility
+      options:
+        - Happens every time
+        - Happens intermittently
+        - Happened once
+        - Unknown
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and Error Messages
+      description: Paste relevant logs or exact error codes. Redact sensitive information.
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add screenshots, relevant configuration, or anything else that may help.
+    validations:
+      required: false
