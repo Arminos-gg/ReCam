@@ -1,19 +1,14 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: BUG
-labels: ''
-assignees: Arminos-gg
-
----
-
----
-name: Bug Report
-about: Report a bug or technical issue with ReCam.
-title: "[Bug]: "
+about: Report a bug or technical issue with ReCam
+title: Bug
 labels: bug
-assignees: ""
+assignees: Arminos-gg
+type: Bug
+
 ---
+
+## Title
 
 ## Bug Description
 
@@ -37,7 +32,7 @@ What actually happened?
 ## Environment
 
 - **ReCam version / commit:**
-- **Operating system:**
+- **Operating system:** Windows / Linux
 - **OS version / Linux distribution:**
 - **Connection:** Wi-Fi / USB
 - **Virtual camera backend:** Media Foundation / DirectShow / v4l2loopback / Unknown
