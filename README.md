@@ -1,5 +1,6 @@
 # ReCam
-# iPhone Webcam for Discord
+
+**iPhone webcam for Discord on Windows.**
 
 Turn your iPhone into a virtual webcam for Discord and other desktop applications on Windows and Linux.
 
@@ -188,11 +189,11 @@ Areas where help would be particularly useful include:
 - Safari camera capture and HTTPS certificate handling.
 - Native iOS video capture and USB transport.
 
-Please document your operating system, application version and reproduction steps when reporting compatibility issues.
+Please document your operating system, application version and reproduction steps when reporting compatibility issues. See [CONTRIBUTING.md](CONTRIBUTING.md) for details, and [SECURITY.md](SECURITY.md) for reporting security problems privately.
 
 ## License
 
-The project license has not yet been finalised. A license will be added once the implementation and its third-party dependencies have been reviewed.
+ReCam is licensed under the [GNU General Public License v3.0](LICENSE).
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest a new feature or improvement for ReCam
-title: ''
+title: "[Feature]: "
 labels: enhancement
 assignees: ''
 type: Feature
