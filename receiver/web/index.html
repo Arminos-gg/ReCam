@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ReCam">
+<title>ReCam</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="sender">
+<video id="preview" autoplay muted playsinline></video>
+
+<div id="panel">
+  <h1>ReCam</h1>
+  <p id="status">Turn the phone sideways, then press Start.</p>
+  <div class="row">
+    <button id="start" class="primary">Start</button>
+    <button id="stop" hidden>Stop</button>
+    <button id="flip" title="Switch between back and front camera">Front camera</button>
+  </div>
+  <p class="hint">Keep this page open with the screen on. Locking the phone or switching apps pauses the camera, and it resumes when you come back.</p>
+</div>
+
+<pre id="stats" hidden></pre>
+
+<script src="sender.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReCam Preview</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="viewer">
+<video id="video" autoplay muted playsinline></video>
+
+<div id="waiting">
+  <h1>Waiting for the iPhone</h1>
+  <img src="qr.png" alt="QR code with the address for the iPhone">
+  <p>Scan this with the iPhone camera, open the link in Safari and press Start.</p>
+  <code id="url"></code>
+</div>
+
+<pre id="stats" hidden></pre>
+
+<script src="view.js"></script>
+</body>
+</html>
