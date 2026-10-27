@@ -1,10 +1,13 @@
 @echo off
 rem Installs the ReCam test camera into Program Files, where Windows' camera service can load it.
+rem Ask for administrator rights if we don't have them yet, then run again elevated.
 net session >nul 2>&1
 if errorlevel 1 (
-  echo Please right-click install.cmd and choose "Run as administrator".
-  pause
-  exit /b 1
+  powershell -NoProfile -Command "Start-Process -FilePath '%~f0' -Verb RunAs" || (
+    echo Administrator rights are needed. Please allow the prompt and try again.
+    pause
+  )
+  exit /b
 )
 set "DEST=%ProgramFiles%\ReCam\TestCamera"
 if not exist "%DEST%" mkdir "%DEST%"
