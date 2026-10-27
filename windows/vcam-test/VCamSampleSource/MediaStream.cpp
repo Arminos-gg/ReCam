@@ -198,13 +198,35 @@ STDMETHODIMP MediaStream::GetStreamDescriptor(IMFStreamDescriptor** ppStreamDesc
 STDMETHODIMP MediaStream::RequestSample(IUnknown* pToken)
 {
 	//WINTRACE(L"MediaStream::RequestSample pToken:%p", pToken);
+
+	// ReCam: deliver at most 30 frames per second. Discord asks for the next sample as
+	// soon as it gets one (about 700 per second in the first test), and a real camera
+	// cannot be faster than its frames arrive either. The schedule is absolute, so a
+	// late wake-up shortens the next wait and the average stays at 30.
+	const MFTIME frameDuration = 333333; // 100 ns units
+	MFTIME wait = 0;
+	{
+		winrt::slim_lock_guard lock(_lock);
+		auto now = MFGetSystemTime();
+		if (_nextFrameTime < now - frameDuration)
+		{
+			_nextFrameTime = now; // first frame, or the client paused: start a new schedule
+		}
+		wait = _nextFrameTime - now;
+		_nextFrameTime += frameDuration;
+	}
+	if (wait > 0)
+	{
+		Sleep((DWORD)(wait / 10000));
+	}
+
 	winrt::slim_lock_guard lock(_lock);
 	RETURN_HR_IF(MF_E_SHUTDOWN, !_allocator || !_queue);
 
 	wil::com_ptr_nothrow<IMFSample> sample;
 	RETURN_IF_FAILED(_allocator->AllocateSample(&sample));
 	RETURN_IF_FAILED(sample->SetSampleTime(MFGetSystemTime()));
-	RETURN_IF_FAILED(sample->SetSampleDuration(333333));
+	RETURN_IF_FAILED(sample->SetSampleDuration(frameDuration));
 
 	// generate frame
 	wil::com_ptr_nothrow<IMFSample> outSample;

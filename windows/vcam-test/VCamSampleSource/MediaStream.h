@@ -29,7 +29,8 @@ public:
 		_state(MF_STREAM_STATE_STOPPED),
 		_format(GUID_NULL),
 		_width(0),
-		_height(0)
+		_height(0),
+		_nextFrameTime(0)
 	{
 		SetBaseAttributesTraceName(L"MediaStreamAtts");
 	}
@@ -56,6 +57,7 @@ private:
 	GUID _format;
 	UINT32 _width;
 	UINT32 _height;
+	MFTIME _nextFrameTime;
 	wil::com_ptr_nothrow<IMFMediaType> _type;
 	wil::com_ptr_nothrow<IMFStreamDescriptor> _descriptor;
 	wil::com_ptr_nothrow<IMFMediaEventQueue> _queue;

@@ -13,6 +13,8 @@ It is based on [VCamSample](https://github.com/smourier/VCamSample) by Simon Mou
 - Draws colour bars and a moving bar instead of per-pixel HSL blocks, which keeps
   1080p cheap on the CPU. The overlay shows format, resolution, frame number and fps.
 - Own CLSID and the camera name "ReCam Test Camera".
+- Paces itself to 30 fps. Upstream made a frame on every request, and Discord
+  requests them as fast as they come (about 700 fps in the first test).
 - Fixes in upstream code: `SetStreamState` compared with `=` instead of `==`,
   `MediaSource::Start` read the stream state with the wrong index, a restart passed a
   null media type to the sample allocator, and NV12's default stride was 1.5x the width.
