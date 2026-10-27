@@ -85,5 +85,21 @@ body.live .row { margin: 8px 0 0; }
   padding: 16px;
   text-align: center;
 }
+#waiting .hint { max-width: 460px; }
+
+#paused {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  top: 16px;
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--warn);
+  text-align: center;
+}
+
 #waiting img { width: 260px; height: 260px; border-radius: 12px; background: #fff; padding: 10px; }
 #waiting code { color: var(--muted); font-size: 13px; word-break: break-all; }

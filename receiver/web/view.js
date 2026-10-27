@@ -41,6 +41,7 @@ async function poll() {
     const s = await (await fetch('/status')).json();
     $('url').textContent = s.phoneURL;
     waiting.hidden = s.phoneConnected;
+    $('paused').hidden = !(s.phoneConnected && s.phonePaused);
   } catch {
     waiting.hidden = false;
     $('url').textContent = 'The receiver is not running.';

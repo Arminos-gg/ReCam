@@ -15,6 +15,7 @@ let pc = null;          // connection to the receiver
 let resource = null;    // WHIP session URL, for a clean DELETE on stop
 let running = false;    // the user pressed Start and not Stop
 let wakeLock = null;
+let awake = 'not yet';  // whether iOS agreed to keep the screen on, shown in the stats
 let retryTimer = null;
 let statsTimer = null;
 let lastOut = null;
@@ -153,6 +154,7 @@ async function start() {
   keepAwake();
   try {
     await connect();
+    keepAwake(); // the camera prompt can cost the lock taken above
   } catch (e) {
     if (e.name === 'NotAllowedError') {
       stop();
@@ -190,12 +192,33 @@ async function flip() {
   } catch (e) { recover(e.message); }
 }
 
+// Without this, iOS auto-locks the phone after its Auto-Lock delay (30 s at the
+// shortest) and the camera stops. iOS also drops the lock when the page is hidden,
+// so it is taken again whenever it is released while streaming.
 async function keepAwake() {
-  if (!('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+  if (!running || document.visibilityState !== 'visible' || (wakeLock && !wakeLock.released)) return;
+  if (!('wakeLock' in navigator)) { awake = 'not supported'; return showAwakeWarning(); }
   try {
-    wakeLock = await navigator.wakeLock.request('screen');
-  } catch (e) { console.warn('wake lock', e); }
+    const lock = await navigator.wakeLock.request('screen');
+    wakeLock = lock;
+    awake = 'yes';
+    lock.addEventListener('release', () => {
+      awake = 'no';
+      if (running && document.visibilityState === 'visible') setTimeout(keepAwake, 500);
+    });
+  } catch (e) {
+    awake = 'refused (' + e.name + ')';
+    console.warn('wake lock', e);
+    showAwakeWarning();
+  }
 }
+
+function showAwakeWarning() {
+  if (running) setStatus('iOS would not keep the screen on, so the camera stops when the phone locks. Set Settings › Display & Brightness › Auto-Lock to Never while streaming, or tap the screen to try again.', 'warn');
+}
+
+// a tap counts as a user gesture, which some iOS versions want before granting the lock
+document.addEventListener('click', () => keepAwake());
 
 // iOS stops the camera while the page is hidden; get it back when the page returns.
 document.addEventListener('visibilitychange', async () => {
@@ -236,6 +259,7 @@ async function showStats() {
     remote && remote.roundTripTime !== undefined ? `round trip ${Math.round(remote.roundTripTime * 1000)} ms` : '',
     remote && remote.fractionLost !== undefined ? `loss ${(remote.fractionLost * 100).toFixed(1)}%` : '',
     out.qualityLimitationReason && out.qualityLimitationReason !== 'none' ? `limited by ${out.qualityLimitationReason}` : '',
+    `screen kept on: ${awake}`,
   ];
   statsEl.textContent = lines.filter(Boolean).join('\n');
   statsEl.hidden = false;

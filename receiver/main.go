@@ -108,6 +108,7 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]any{
 			"phoneConnected": h.phoneConnected(),
+			"phonePaused":    h.paused.Load(),
 			"phoneURL":       phoneURL,
 		})
 	})
@@ -138,11 +139,15 @@ func main() {
 	fmt.Printf("  Preview on this PC:                      %s\n", previewURL)
 	fmt.Printf("  Certificate for the phone (optional):    https://%s:%d/recam-ca.crt\n\n", host, *port)
 
+	warnPublicNetworks()
+
 	if !*noBrowser {
 		openBrowser(previewURL)
 	}
 	select {}
 }
+
+const pausedBelowKbps = 200
 
 func logStats(h *hub) {
 	const every = 5 * time.Second
@@ -152,8 +157,17 @@ func logStats(h *hub) {
 		p, b, f, l, k := s.packets.Load(), s.bytes.Load(), s.frames.Load(), s.lost.Load(), s.keyframes.Load()
 		if p != lastPackets {
 			secs := every.Seconds()
+			fps, kbps := float64(f-lastFrames)/secs, float64(b-lastBytes)*8/1000/secs
 			log.Printf("phone: %.1f fps, %.0f kbit/s, %d packets missing before retransmission, %d keyframes",
-				float64(f-lastFrames)/secs, float64(b-lastBytes)*8/1000/secs, l-lastLost, k-lastKeys)
+				fps, kbps, l-lastLost, k-lastKeys)
+
+			// real 720p video needs well over 500 kbit/s; a trickle at full frame rate
+			// means Safari is sending empty frames because iOS paused the camera
+			paused := fps >= 1 && kbps < pausedBelowKbps
+			if paused && !h.paused.Load() {
+				log.Printf("phone: sending almost nothing, so its camera is paused. Is the screen locked or the ReCam page hidden?")
+			}
+			h.paused.Store(paused)
 		}
 		lastPackets, lastBytes, lastFrames, lastLost, lastKeys = p, b, f, l, k
 	}

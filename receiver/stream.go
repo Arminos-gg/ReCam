@@ -87,6 +87,10 @@ type hub struct {
 
 	out   rewriter
 	stats streamStats
+
+	// paused is set while the phone is connected but sends almost nothing, which is
+	// what Safari does when iOS has paused the camera (screen locked, page hidden)
+	paused atomic.Bool
 }
 
 func newHub(api *webrtc.API) (*hub, error) {
@@ -188,6 +192,7 @@ func (h *hub) dropPhone(id string) {
 	}
 	h.phone, h.phoneID, h.phoneSSRC = nil, "", 0
 	h.mu.Unlock()
+	h.paused.Store(false)
 	pc.Close()
 }
 
